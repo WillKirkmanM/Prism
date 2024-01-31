@@ -17,6 +17,7 @@ func main() {
 
 	app.Get("/encrypt", encrypt)
 	app.Get("/decrypt", decrypt)
+	app.Get("/messages/add", createMessage)
 
 	app.Listen(":3001")
 }
