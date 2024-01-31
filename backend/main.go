@@ -15,9 +15,10 @@ func main() {
 
 	app.Use(recover.New())
 
-	app.Get("/encrypt", encrypt)
-	app.Get("/decrypt", decrypt)
-	app.Get("/messages/add", createMessage)
+	app.Post("/encrypt", encrypt)
+	app.Post("/decrypt", decrypt)
+	app.Post("/messages/add", createMessage)
+	app.Get("/messages/get", searchMessage)
 
 	app.Listen(":3001")
 }
