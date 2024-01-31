@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: prism-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.backend
+    container_name: prism-backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/app
