@@ -11,11 +11,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// Shared key for encryption and decryption
 var key = generateKey()
 
 func generateKey() []byte {
-	// Generate a new 32-byte key
 	key := make([]byte, 32)
 	if _, err := rand.Read(key); err != nil {
 		panic(fmt.Sprintf("error generating key: %v", err))
@@ -23,8 +21,18 @@ func generateKey() []byte {
 	return key
 }
 
+type RequestBody struct {
+	Message string `json:"message"`
+}
+
 func encrypt(c *fiber.Ctx) error {
-	stringToEncrypt := c.Get("message")
+	var body RequestBody
+	err := c.BodyParser(&body)
+	if err != nil {
+		return err
+	}
+
+	stringToEncrypt := body.Message
 
 	plaintext := []byte(stringToEncrypt)
 
@@ -40,13 +48,21 @@ func encrypt(c *fiber.Ctx) error {
 	}
 
 	stream := cipher.NewCFBEncrypter(block, iv)
+
 	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
 
 	return c.SendString(hex.EncodeToString(ciphertext))
 }
 
 func decrypt(c *fiber.Ctx) error {
-	encryptedString := c.Get("message")
+	var body RequestBody
+	err := c.BodyParser(&body)
+	if err != nil {
+		fmt.Println("There was an error", err)
+		return err
+	}
+
+	encryptedString := body.Message
 
 	ciphertext, _ := hex.DecodeString(encryptedString)
 
