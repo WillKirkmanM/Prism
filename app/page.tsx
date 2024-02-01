@@ -3,18 +3,30 @@
 import { useState } from 'react';
 import { Center, Text, Title, Stack, Textarea, Button } from '@mantine/core';
 import Link from 'next/link';
+import { useKeyPair } from './providers/KeyPairContext';
 
 export default function HomePage() {
   const [message, setMessage] = useState('');
   const [uuid, setUUID] = useState<string | null>(null)
+  const publicKey = useKeyPair()!.publicKey;
 
   async function handleSendMessage() {
+
+    const encodedMessage = new TextEncoder().encode(message);
+    const encryptedMessage = await window.crypto.subtle.encrypt(
+      { name: "RSA-OAEP" },
+      publicKey,
+      encodedMessage
+    );
+
+    const encryptedMessageBase64 = btoa(String.fromCharCode(...new Uint8Array(encryptedMessage)));
+
     const response = await fetch('http://127.0.0.1:3001/messages/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message }),
+      body: JSON.stringify({ message: encryptedMessageBase64 }),
     });
 
     const result = await response.json();
