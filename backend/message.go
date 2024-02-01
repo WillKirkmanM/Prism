@@ -11,11 +11,11 @@ import (
 )
 
 type Message struct {
-	Key  string    `json:"key" redis:",key"` 
-	UUID string		`json:"uuid" redis:",uuid"`
-	Ver  int64     `json:"ver" redis:",ver"` 
-	EncryptedMessage string    `json:"encryptedMessage"`
-	CreatedAt        time.Time `json:"createdAt"`
+	Key  							string    `json:"key" redis:",key"` 
+	UUID 							string		`json:"uuid" redis:",uuid"`
+	Ver  							int64     `json:"ver" redis:",ver"` 
+	EncryptedMessage 	string    `json:"encryptedMessage"`
+	CreatedAt        	time.Time `json:"createdAt"`
 }
 
 func createMessage(c *fiber.Ctx) error {
@@ -66,7 +66,6 @@ func searchMessage(c *fiber.Ctx) error {
 		return err
 	}
 	defer client.Close()
-
 	repo := om.NewJSONRepository("message", Message{}, client).(*om.JSONRepository[Message])
 
 	uuid := c.Get("uuid") 
