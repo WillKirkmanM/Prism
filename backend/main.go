@@ -11,7 +11,12 @@ func main() {
 
 	app.Use(LocalhostOnly)
 
-	app.Use(cors.New())
+	app.Use(cors.New(cors.Config{
+		// AllowOrigins: "http://127.0.0.1:3000",
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept, uuid",
+		AllowMethods: "GET,POST",
+	}))
 
 	app.Use(recover.New())
 
