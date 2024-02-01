@@ -1,4 +1,5 @@
 # Prism | The End-To-End Encrypted Message Relay
+Prism is a millitary-grade, end-to-end encrypted message relay. It allows users to send messages to each other without having to worry about their messages being intercepted by a third party.
 
 
 ## Get Started
