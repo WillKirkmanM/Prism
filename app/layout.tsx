@@ -2,6 +2,7 @@ import "@mantine/core/styles.css";
 import React from "react";
 import { MantineProvider, ColorSchemeScript } from "@mantine/core";
 import { theme } from "../theme";
+import KeyPairProvider from "./providers/KeyPairContext";
 
 export const metadata = {
   title: "Prism | Millitary Encrypted Secure Messaging",
@@ -20,7 +21,9 @@ export default function RootLayout({ children }: { children: any }) {
         />
       </head>
       <body>
-          <MantineProvider theme={theme}>{children}</MantineProvider>
+          <KeyPairProvider>
+            <MantineProvider theme={theme}>{children}</MantineProvider>
+          </KeyPairProvider>
       </body>
     </html>
   );
