@@ -1,23 +1,25 @@
 version: '3'
 
 services:
-  app:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - redis
+
+  frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    container_name: prism-frontend
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
+    depends_on:
+      - backend
 
-  api:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.backend
-    container_name: prism-backend
+  redis:
+    image: "redis/redis-stack-server:latest"
     ports:
-      - "3001:3001"
-    volumes:
-      - ./backend:/app
+      - "6379:6379"
