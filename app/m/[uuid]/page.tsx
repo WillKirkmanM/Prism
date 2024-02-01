@@ -1,45 +1,34 @@
 "use client"
-
+import { useState, useEffect } from 'react';
 import { Center } from '@mantine/core';
-import { useEffect, useState } from 'react';
 
 interface MessagePageProps {
   params: {
-    uuid: string
-  }
+    uuid: string;
+  };
 }
 
 export default function MessagePage({ params }: MessagePageProps) {
-const [message, setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
-    async function getMessage() {
-      const response = await fetch(`http://localhost:3001/messages/get`, {
+    async function fetchMessage() {
+      const response = await fetch(`http://127.0.0.1:3001/messages/get`, {
         headers: {
-          'uuid': params.uuid
+          "uuid": params.uuid
         }
       });
 
       const { encryptedMessage } = await response.json();
-
-      const decryptResponse = await fetch('http://localhost:3001/decrypt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ message: encryptedMessage })
-        })
-
-      const decryptedMessage = (await decryptResponse.text()).replace(/\\n/g, '<br/>');
-      setMessage(decryptedMessage);
+      setMessage(encryptedMessage);
     }
 
-    getMessage();
+    fetchMessage();
   });
 
   return (
     <Center>
       {message && <div dangerouslySetInnerHTML={{ __html: message }} />}
     </Center>
-  )
+  );
 }
