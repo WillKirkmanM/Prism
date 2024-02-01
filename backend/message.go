@@ -34,7 +34,7 @@ func createMessage(c *fiber.Ctx) error {
 	encryptedMessage := body.Message
 
 	if encryptedMessage == "" {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Missing encryptedMessage header"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Missing message body"})
 	}
 
 	messageRepository := om.NewJSONRepository("message", Message{}, client).(*om.JSONRepository[Message])
